@@ -1,1 +1,53 @@
-New
+#find out id of osd/mon/mgr etc.
+/var/lib/ceph/{cluster-id}/{service-name}.{service-id}
+
+#remove mon
+ceph mon remove customstore2
+
+
+#get config
+ceph config show {service-name}.{service-id}
+#get full config
+ceph config show-with-defaults {service-name}.{service-id}
+
+
+#get replication factor of pool
+ceph osd pool get {pool-name} size
+#change replication factor of pool
+ceph osd pool set {pool-name} size {number}
+
+#get crushmap (ceph-base package must be installed)
+ceph osd getcrushmap -o /{path}/{filename}
+#decompile crushmap file
+crushtool -d /{path}/{filename} -o /{path}/{filename}
+#compile file
+crushtool -c /{path}/{filename} -o /{path}/{filename}
+#apply new changes in crushmap
+ceph osd setcrushmap -i /{path}/{filename}
+
+#auto reweight osd
+ceph osd reweight-by-utilization
+
+#create new pool
+ceph osd pool create {name} {pg_num} {pgp_num} #pgp_num equals to pg_num
+
+#manual reweight
+ceph osd  crush reweight osd.{id} {number}
+
+#delete pool
+ceph osd pool delete --yes-i-really-really-mean-it {pool_name} {pool_name}
+
+#ceph autoscaqler status
+ceph osd pool autoscale-status
+
+
+#innitialize rbd modbrobe
+modprobe -rbd
+# enable application (rbd,cephfs,rgw)
+ceph osd pool application enable DApool rbd(application type)
+
+#rbd pools on clients node
+rbd ls -p DApool
+
+#rbd map
+sudo rbd map -p DApool bar
