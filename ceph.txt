@@ -37,9 +37,14 @@ ceph osd  crush reweight osd.{id} {number}
 #delete pool
 ceph osd pool delete --yes-i-really-really-mean-it {pool_name} {pool_name}
 
-#ceph autoscaqler status
+#ceph autoscaler status
 ceph osd pool autoscale-status
 
+#install public SSH key to a new host
+ssh-copy-id -f -i /etc/ceph/ceph.pub root@customstore3
+
+#add new host to a cluster
+ceph orch host add *newhost*
 
 #innitialize rbd modbrobe
 modprobe -rbd
@@ -54,3 +59,6 @@ rbd ls -p DApool
 
 #rbd map
 sudo rbd map -p DApool bar
+
+#modify ceph dashboard password
+ceph dashboard ac-user-set-password <username> <password>
