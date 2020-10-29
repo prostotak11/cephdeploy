@@ -46,6 +46,9 @@ modprobe -rbd
 # enable application (rbd,cephfs,rgw)
 ceph osd pool application enable DApool rbd(application type)
 
+#rbd create
+rbd create foo --size 1G --image-feature layering -m 192.168.168.48  -p DApool
+
 #rbd pools on clients node
 rbd ls -p DApool
 
