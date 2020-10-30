@@ -101,8 +101,15 @@ cepadm rm-cluster
 #ssh key copy
 ssh-copy-id -f -i /etc/ceph/ceph.pub root@customstore3
 
+
+#to manual managing all cluster need this option
+ceph orch apply {name of service} --unmanaged #{name of service} - mon, mgr, etc.
+
 #add monitor
 ceph orch daemon add mon --placement="customstore3:[v2:192.168.168.50:3300,v1:192.168.168.50:6789]"
+
+#add mgr
+ceph orch daemon add mgr cephosd02
 
 #create mds
 ceph orch apply mds Hyudai --placement="1 customstore4"
