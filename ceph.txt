@@ -17,7 +17,8 @@ ceph -s
 ceph mon remove customstore2
 
 #remove mgr
-ceph orch daemon rm mgr.cephosd02.yymjpi #to find out mon id need to check name at /var/lib/ceph/mgr.{id}.{id}
+ceph orch daemon rm mgr.cephosd02.yymjpi #to find out mon id need to check name at ceph -s command
+
 
 #fixed locked partitions
 dmsetup info # check mapping
