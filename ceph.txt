@@ -1,8 +1,26 @@
+#ceph commads
+ceph -s
+* ceph health detail
+* ceph osd pool ls detail
+* ceph osd tree
+* ceph osd df tree
+* ceph versions
+
 #find out id of osd/mon/mgr etc.
 /var/lib/ceph/{cluster-id}/{service-name}.{service-id}
 
 #remove mon
 ceph mon remove customstore2
+
+#fixed locked partitions
+dmsetup info # check mapping
+dmsetup remove ceph--32233844--166e--48e8--a6e0--38a6d8c4434e-osd--block--6e0b5a72--5c07--4be9--8886--f8d4b61003aa
+
+#fixed incorrect error 5 (mbr to gpt)
+sgdisk --zap-all /dev/sdb
+
+#remove osd
+ceph osd rm 1 (osd-id)
 
 
 #get config
@@ -47,9 +65,12 @@ ssh-copy-id -f -i /etc/ceph/ceph.pub root@customstore3
 ceph orch host add *newhost*
 
 #innitialize rbd modbrobe
-modprobe -rbd
+modprobe rbd
 # enable application (rbd,cephfs,rgw)
 ceph osd pool application enable DApool rbd(application type)
+
+# get keyring
+ceph auth get client.admin
 
 #rbd create
 rbd create foo --size 1G --image-feature layering -m 192.168.168.48  -p DApool
@@ -59,6 +80,30 @@ rbd ls -p DApool
 
 #rbd map
 sudo rbd map -p DApool bar
+rbd showmapped
 
 #modify ceph dashboard password
 ceph dashboard ac-user-set-password <username> <password>
+
+#remove cluster
+cepadm rm-cluster
+
+#ssh key copy
+ssh-copy-id -f -i /etc/ceph/ceph.pub root@customstore3
+
+#add monitor
+ceph orch daemon add mon --placement="customstore3:[v2:192.168.168.50:3300,v1:192.168.168.50:6789]"
+
+#create mds
+ceph orch apply mds Hyudai --placement="1 customstore4"
+
+
+#cephfs
+ceph osd pool create cephfs_data
+ceph osd pool create cephfs_metadata
+ceph fs new Hyudai cephfs_metadata cephfs_data
+ceph fs ls
+ceph mds stat
+
+#mount cephfs on client node
+mount -t ceph 192.168.168.48:6789,192.168.168.49:6789:/ /mnt/defstore -o name=foo,secretfile=/root/ceph.key
