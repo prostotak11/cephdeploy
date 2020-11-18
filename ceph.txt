@@ -5,21 +5,19 @@ ceph -s
 * ceph osd tree
 * ceph osd df tree
 * ceph versions
+*ceph health detail
 
-<<<<<<< HEAD
-=======
+======
 
 #ceph bootstrap cluster
 
 
->>>>>>> 15f3052e0adaa10a1d8ad6b17b48bd8d5ddf8439
 #find out id of osd/mon/mgr etc.
 /var/lib/ceph/{cluster-id}/{service-name}.{service-id}
 
 #remove mon
 ceph mon remove customstore2
 
-<<<<<<< HEAD
 =======
 #remove mgr
 ceph orch daemon rm mgr.cephosd02.yymjpi #to find out mon id need to check name at ceph -s command
@@ -125,6 +123,17 @@ ceph orch daemon add mgr cephosd02
 >>>>>>> 15f3052e0adaa10a1d8ad6b17b48bd8d5ddf8439
 #create mds
 ceph orch apply mds Hyudai --placement="1 customstore4"
+
+
+#remove mds and related pools
+ceph orch ps #to get mds service full name
+ceph orch stop {full name}
+ceph orch rm {full name}
+ceph fs ls #get list of filesystems
+ceph fs rm {name of filesystem} --yes-i-really-mean-it
+
+
+
 
 
 #cephfs
