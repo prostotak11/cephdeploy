@@ -155,3 +155,16 @@ radosgw-admin key rm --uid=lucidlink --key-type=s3 --access-key <access-key>
 
 Rename pool:
 ceph osd pool rename {current-pool-name} {new-pool-name}
+
+
+#iscsi install and configure
+apt install targetcli-fb python3-rtslib-fb tcmu-runner -y
+
+apt purge ceph-iscsi -y && git clone https://github.com/ceph/ceph-iscsi.git && cd ceph-iscsi
+ python3 setup.py install --install-scripts=/usr/bin
+ cp usr/lib/systemd/system/rbd-target-gw.service /lib/systemd/system && cp usr/lib/systemd/system/rbd-target-api.service /lib/systemd/system
+ systemctl daemon-reload && systemctl enable rbd-target-gw && systemctl start rbd-target-gw && \
+ systemctl enable rbd-target-api && systemctl start rbd-target-api && systemctl status rbd-target-api
+
+
+systemctl daemon-reload && systemctl stop rbd-target-api.service && systemctl start rbd-target-api.service && systemctl status rbd-target-api.service
