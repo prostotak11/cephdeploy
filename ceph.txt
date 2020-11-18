@@ -147,3 +147,6 @@ Remove a key:
 radosgw-admin key rm --uid=lucidlink --key-type=s3 --access-key <access-key>
 =======
 >>>>>>> 15f3052e0adaa10a1d8ad6b17b48bd8d5ddf8439
+
+Rename pool:
+ceph osd pool rename {current-pool-name} {new-pool-name}
