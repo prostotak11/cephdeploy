@@ -130,8 +130,6 @@ ceph fs rm {name of filesystem} --yes-i-really-mean-it
 
 
 
-
-
 #cephfs
 ceph osd pool create cephfs_data
 ceph osd pool create cephfs_metadata
@@ -141,7 +139,6 @@ ceph mds stat
 
 #mount cephfs on client node
 mount -t ceph 192.168.168.48:6789,192.168.168.49:6789:/ /mnt/defstore -o name=foo,secretfile=/root/ceph.key
-<<<<<<< HEAD
 
 Create an additional user S3 key:
 
@@ -150,8 +147,6 @@ note: you may create multiple S3 key pairs for a user. you may also create multi
 Remove a key:
 
 radosgw-admin key rm --uid=lucidlink --key-type=s3 --access-key <access-key>
-=======
->>>>>>> 15f3052e0adaa10a1d8ad6b17b48bd8d5ddf8439
 
 Rename pool:
 ceph osd pool rename {current-pool-name} {new-pool-name}
