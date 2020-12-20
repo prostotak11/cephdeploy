@@ -1,0 +1,80 @@
+Bootstrap host for k8s
+
+#!/bin/bash
+
+echo "[TASK 1] Disable and turn off SWAP"
+sed -i '/swap/d' /etc/fstab
+swapoff -a
+
+echo "[TASK 2] Stop and Disable firewall"
+systemctl disable --now ufw
+
+echo "[TASK 3] Enable and Load Kernel modules"
+cat >>/etc/modules-load.d/containerd.conf<<EOF
+overlay
+br_netfilter
+EOF
+modprobe overlay
+modprobe br_netfilter
+
+echo "[TASK 4] Add Kernel settings"
+cat >>/etc/sysctl.d/kubernetes.conf<<EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+EOF
+sysctl --system
+
+echo "[TASK 5] Install containerd runtime"
+apt update -qq
+apt install -qq -y containerd apt-transport-https
+mkdir /etc/containerd
+containerd config default > /etc/containerd/config.toml
+systemctl restart containerd
+systemctl enable containerd
+
+echo "[TASK 6] Add apt repo for kubernetes"
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+
+echo "[TASK 7] Install Kubernetes components (kubeadm, kubelet and kubectl)"
+apt install -qq -y kubeadm=1.20.0-00 kubelet=1.20.0-00 kubectl=1.20.0-00
+
+
+
+
+
+fixing error  error execution phase preflight: [preflight] Some fatal errors occurred:
+        [ERROR FileAvailable--etc-kubernetes-manifests-kube-apiserver.yaml]: /etc/kubernetes/manifests/kube-apiserver.yaml already exists
+        [ERROR FileAvailable--etc-kubernetes-manifests-kube-controller-manager.yaml]: /etc/kubernetes/manifests/kube-controller-manager.yaml already exists
+        [ERROR FileAvailable--etc-kubernetes-manifests-kube-scheduler.yaml]: /etc/kubernetes/manifests/kube-scheduler.yaml already exists
+        [ERROR FileAvailable--etc-kubernetes-manifests-etcd.yaml]: /etc/kubernetes/manifests/etcd.yaml already exists
+        [ERROR DirAvailable--var-lib-etcd]: /var/lib/etcd is not empty
+[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+
+
+need to run next commands - systemctl stop kubelet.service && kubeadm reset and do kubeadm init again
+
+
+fix error Unable to connect to the server: x509: certificate signed by unknown authority (possibly because of "crypto/rsa: verification error" while trying to verify candidate authority certificate "kubernetes")
+mkdir -p $HOME/.kube  &&
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config   &&
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+fix error containers kube ds stuck on Ceating state - create a CNI Calico
+
+
+
+create kluster
+
+echo "[TASK 1] Pull required containers"
+kubeadm config images pull >/dev/null 2>&1
+
+echo "[TASK 2] Initialize Kubernetes Cluster"
+kubeadm init --apiserver-advertise-address=172.16.16.100 --pod-network-cidr=192.168.0.0/16 >> /root/kubeinit.log 2>/dev/null
+
+echo "[TASK 3] Deploy Calico network"
+kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.16/manifests/calico.yaml >/dev/null 2>&1
+
+echo "[TASK 4] Generate and save cluster join command to /joincluster.sh"
+kubeadm token create --print-join-command
