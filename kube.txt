@@ -80,3 +80,17 @@ echo "[TASK 4] Generate and save cluster join command to /joincluster.sh"
 kubeadm token create --print-join-command
 
 kubectl get services #services LoadBalancer/NodePort etc.
+
+curl 192.168.168.204:33368 -H "host: test-k8s.example.com" #get http page with custom header
+
+
+#kubectl short names
+ - ns #namespaces
+ - svc #services
+ - ing #ingress
+
+ #describe resource
+ kubectl describe <name> ( -n <ns optional)>
+
+ #enter inside of the container
+ kubectl exec -it ( --namespace <ns name optional) >  <container name> -- /bin/bash
