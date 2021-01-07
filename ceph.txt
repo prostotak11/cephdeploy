@@ -53,9 +53,6 @@ crushtool -c /{path}/{filename} -o /{path}/{filename}
 #apply new changes in crushmap
 ceph osd setcrushmap -i /{path}/{filename}
 
-#auto reweight osd
-ceph osd reweight-by-utilization
-
 #create new pool
 ceph osd pool create {name} {pg_num} {pgp_num} #pgp_num equals to pg_num
 
@@ -163,3 +160,12 @@ apt purge ceph-iscsi -y && git clone https://github.com/ceph/ceph-iscsi.git && c
 
 
 systemctl daemon-reload && systemctl stop rbd-target-api.service && systemctl start rbd-target-api.service && systemctl status rbd-target-api.service
+
+
+
+
+https://gitmemory.com/issue/ceph/ceph-iscsi/99/515029937
+https://www.suse.com/support/kb/doc/?id=000019734
+
+
+ceph dashboard set-grafana-api-ssl-verify False
