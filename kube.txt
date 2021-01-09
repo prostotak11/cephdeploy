@@ -65,7 +65,7 @@ fix error containers kube ds stuck on Ceating state - create a CNI Calico
 
 
 
-create kluster
+create cluster
 
 echo "[TASK 1] Pull required containers"
 kubeadm config images pull >/dev/null 2>&1
@@ -94,3 +94,10 @@ curl 192.168.168.204:33368 -H "host: test-k8s.example.com" #get http page with c
 
  #enter inside of the container
  kubectl exec -it ( --namespace <ns name optional) >  <container name> -- /bin/bash
+
+
+https://stackoverflow.com/questions/58673051/ingress-routing-api-prefix-issue
+
+https://opensource.com/article/20/5/helm-charts
+
+kubectl rollout restart deployment [deployment_name]
