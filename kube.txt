@@ -101,3 +101,10 @@ https://stackoverflow.com/questions/58673051/ingress-routing-api-prefix-issue
 https://opensource.com/article/20/5/helm-charts
 
 kubectl rollout restart deployment [deployment_name]
+
+
+
+#downgrade cluster to specific version of kubectl
+apt install -qq -y kubeadm=1.20.0-00 kubelet=1.20.0-00 kubectl=1.20.0-00 -y --allow-downgrades
+systemctl restart kubelet
+kubeadm upgrade apply v1.20.0
