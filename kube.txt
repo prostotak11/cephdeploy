@@ -100,6 +100,8 @@ https://stackoverflow.com/questions/58673051/ingress-routing-api-prefix-issue
 
 https://opensource.com/article/20/5/helm-charts
 
+https://serverfault.com/questions/933355/nginx-err-too-many-redirects-after-add-ssl
+
 kubectl rollout restart deployment [deployment_name]
 
 
