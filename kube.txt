@@ -102,6 +102,9 @@ https://opensource.com/article/20/5/helm-charts
 
 https://serverfault.com/questions/933355/nginx-err-too-many-redirects-after-add-ssl
 
+https://stackoverflow.com/questions/48410293/kubernetes-ingress-not-adding-the-application-url-for-grafana-dashboard
+
+
 kubectl rollout restart deployment [deployment_name]
 
 
@@ -110,3 +113,7 @@ kubectl rollout restart deployment [deployment_name]
 apt install -qq -y kubeadm=1.20.0-00 kubelet=1.20.0-00 kubectl=1.20.0-00 -y --allow-downgrades
 systemctl restart kubelet
 kubeadm upgrade apply v1.20.0
+
+
+
+helm dependency update
