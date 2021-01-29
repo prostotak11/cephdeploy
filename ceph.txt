@@ -145,6 +145,10 @@ Remove a key:
 
 radosgw-admin key rm --uid=lucidlink --key-type=s3 --access-key <access-key>
 
+radosgw-admin metadata list user #show all users
+
+
+
 Rename pool:
 ceph osd pool rename {current-pool-name} {new-pool-name}
 
@@ -169,3 +173,8 @@ https://www.suse.com/support/kb/doc/?id=000019734
 
 
 ceph dashboard set-grafana-api-ssl-verify False
+
+
+ceph auth caps client.kubik mon 'allow rw' osd 'allow rwx pool=kube, allow rwx pool=cephfs_data'
+ceph auth get-key {name}
+ceph auth ls

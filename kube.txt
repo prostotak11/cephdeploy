@@ -117,3 +117,20 @@ kubeadm upgrade apply v1.20.0
 
 
 helm dependency update
+helm install {name of chart} . --values values.yaml
+helm uninstall {name of chart} . --values values.yaml
+helm upgrade {name of chart} . --values values.yaml
+
+
+
+
+#grafana.ini
+[server]
+    domain = test-k8s.kiv.dataart.net
+    root_url = %(protocol)s://%(domain)s:%(http_port)s/grafana/
+    serve_from_sub_path = true
+
+
+
+#restart deployment
+kubectl rollout restart deployment {name}
