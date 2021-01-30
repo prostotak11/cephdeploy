@@ -134,3 +134,7 @@ helm upgrade {name of chart} . --values values.yaml
 
 #restart deployment
 kubectl rollout restart deployment {name}
+
+
+#copy files to pod
+kubectl cp  {path to file or dir} {pod name}:{path in pod}
